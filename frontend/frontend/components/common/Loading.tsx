@@ -1,1 +1,8 @@
-export function Loading() { return <div className="loading">جار التحميل...</div>; }
+export default function Loading({ text = 'جاري التحميل...' }: { text?: string }) {
+  return (
+    <div className="flex flex-col items-center justify-center h-64">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <p className="mt-4 text-gray-600">{text}</p>
+    </div>
+  );
+}

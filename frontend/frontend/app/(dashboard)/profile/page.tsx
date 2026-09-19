@@ -1,2 +1,42 @@
-import { Mail, Settings, UserRound } from "lucide-react";
-export default function ProfilePage() { return <div><div className="page-title-row"><div><p className="eyebrow">حسابك</p><h1>الملف الشخصي</h1><p className="subheading">أدر بياناتك وتفضيلاتك.</p></div></div><div className="profile-panel"><div className="profile-avatar"><UserRound size={36} /></div><h2>سارة أحمد</h2><p><Mail size={15} /> sarah@example.com</p><button className="outline-button"><Settings size={16} /> إعدادات الحساب</button></div></div>; }
+'use client';
+
+import { useAuth } from '@/hooks/useAuth';
+
+export default function ProfilePage() {
+  const { user } = useAuth();
+
+  return (
+    <div className="max-w-2xl mx-auto">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">الملف الشخصي</h1>
+
+      <div className="bg-white rounded-2xl shadow-lg p-8">
+        <div className="flex items-center gap-4 mb-6">
+          <div className="bg-blue-500 w-20 h-20 rounded-full flex items-center justify-center text-white text-3xl font-bold">
+            {user?.name?.charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold text-gray-800">{user?.name}</h2>
+            <p className="text-gray-500">{user?.email}</p>
+          </div>
+        </div>
+
+        <div className="border-t border-gray-200 pt-6 space-y-4">
+          <div className="flex items-center justify-between">
+            <span className="text-gray-600">الاسم</span>
+            <span className="font-medium text-gray-800">{user?.name}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-600">البريد الإلكتروني</span>
+            <span className="font-medium text-gray-800">{user?.email}</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-gray-600">الدور</span>
+            <span className="font-medium text-gray-800">
+              {user?.role === 'admin' ? '👑 مدير' : '👤 مستخدم'}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

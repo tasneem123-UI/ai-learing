@@ -1,2 +1,18 @@
-import type { Flashcard } from "@/types/flashcard";
-export const flashcardService = { list: async (): Promise<Flashcard[]> => [{ id: "1", category: "الذكاء الاصطناعي", question: "ما هو التعلم الآلي؟", answer: "فرع من الذكاء الاصطناعي يتيح للأنظمة التعلم من البيانات دون برمجة صريحة." }, { id: "2", category: "الذكاء الاصطناعي", question: "ما الفرق بين AI و ML؟", answer: "التعلم الآلي هو أحد فروع الذكاء الاصطناعي ويركز على التعلم من البيانات." }] };
+import api from './api';
+
+export const flashcardService = {
+  // جلب كل البطاقات
+  getAll: () => api.get('/flashcards'),
+
+  // جلب بطاقات مستند معين
+  getByDocument: (documentId: string) =>
+    api.get(`/flashcards/document/${documentId}`),
+
+  // تحديث بطاقة (مفضلة)
+  update: (id: string, data: any) => api.put(`/flashcards/${id}`, data),
+
+  // حذف بطاقة
+  delete: (id: string) => api.delete(`/flashcards/${id}`),
+};
+
+export default flashcardService;
