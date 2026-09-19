@@ -2,29 +2,6 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
-// ==========================================
-// ✅ إعدادات الكوكي الموحدة
-// ==========================================
-const isProduction = process.env.NODE_ENV === 'production';
- 
-
-const cookieOptions = {
-    httpOnly: true,
-    secure: isProduction,          // true في production (HTTPS)
-    sameSite: isProduction ? 'none' : 'lax',  // none في production، lax محلياً
-};
-
-const accessTokenCookieOptions = {
-    ...cookieOptions,
-    maxAge: 15 * 60 * 1000,        // 15 دقيقة
-};
-
-const refreshTokenCookieOptions = {
-    ...cookieOptions,
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 أيام
-};
-
-// ==========================================
 // ✅ توليد Access Token
 // ==========================================
 const generateAccessToken = (user) => {
