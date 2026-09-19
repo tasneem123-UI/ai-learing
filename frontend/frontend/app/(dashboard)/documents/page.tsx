@@ -10,8 +10,9 @@ interface Document {
   title: string;
   fileName: string;
   fileType: string;
-  content: string;
   createdAt: string;
+  flashcardsCount?: number;
+  quizzesCount?: number;
 }
 
 export default function DocumentsPage() {
@@ -49,6 +50,7 @@ export default function DocumentsPage() {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('title', title || file.name);
+    formData.append('fileType', file.name.split('.').pop() || 'other');
 
     try {
       await documentService.upload(formData);
@@ -76,6 +78,22 @@ export default function DocumentsPage() {
     }
   };
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('ar-EG', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const getFileIcon = (fileName: string) => {
+    if (fileName.endsWith('.pdf')) return '📕';
+    if (fileName.endsWith('.docx') || fileName.endsWith('.doc')) return '📘';
+    if (fileName.endsWith('.txt')) return '📄';
+    return '📁';
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
@@ -99,7 +117,9 @@ export default function DocumentsPage() {
       {documents.length === 0 ? (
         <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
           <p className="text-6xl mb-4">📄</p>
-          <h2 className="text-xl font-bold text-gray-700 mb-2">لا توجد مستندات بعد</h2>
+          <h2 className="text-xl font-bold text-gray-700 mb-2">
+            لا توجد مستندات بعد
+          </h2>
           <p className="text-gray-500 mb-6">ارفع مستندك الأول لتبدأ</p>
           <button
             onClick={() => setShowModal(true)}
@@ -111,23 +131,57 @@ export default function DocumentsPage() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {documents.map((doc) => (
-            <div key={doc._id} className="bg-white rounded-2xl shadow-lg p-6">
+            <div
+              key={doc._id}
+              className="bg-white rounded-2xl shadow-lg p-6 flex flex-col hover:shadow-xl transition"
+            >
+              {/* Icon + Delete */}
               <div className="flex items-start justify-between mb-4">
-                <div className="bg-blue-100 w-12 h-12 rounded-lg flex items-center justify-center text-2xl">
-                  📄
+                <div className="bg-blue-100 w-14 h-14 rounded-xl flex items-center justify-center text-3xl">
+                  {getFileIcon(doc.fileName)}
                 </div>
                 <button
                   onClick={() => handleDelete(doc._id)}
-                  className="text-red-500 hover:text-red-700 text-sm"
+                  className="text-red-500 hover:text-red-700 text-lg"
+                  title="حذف"
                 >
                   🗑️
                 </button>
               </div>
-              <h3 className="font-bold text-gray-800 mb-2 truncate">{doc.title}</h3>
-              <p className="text-sm text-gray-500 mb-4 truncate">{doc.fileName}</p>
+
+              {/* Title */}
+              <h3
+                className="font-bold text-gray-800 mb-1 truncate"
+                title={doc.title}
+              >
+                {doc.title}
+              </h3>
+              <p
+                className="text-sm text-gray-500 mb-3 truncate"
+                title={doc.fileName}
+              >
+                {doc.fileName}
+              </p>
+
+              {/* Stats */}
+              <div className="flex items-center gap-2 mb-4 text-xs flex-wrap">
+                <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                  🃏 {doc.flashcardsCount ?? 0} بطاقة
+                </span>
+                <span className="bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                  📝 {doc.quizzesCount ?? 0} اختبار
+                </span>
+              </div>
+
+              {/* Date */}
+              <p className="text-xs text-gray-400 mb-4">
+                📅 {formatDate(doc.createdAt)}
+              </p>
+
+              {/* Action */}
               <Link
                 href={`/documents/${doc._id}`}
-                className="block text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm"
+                className="block text-center bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition text-sm mt-auto"
               >
                 عرض التفاصيل
               </Link>
@@ -136,10 +190,13 @@ export default function DocumentsPage() {
         </div>
       )}
 
+      {/* Upload Modal */}
       {showModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">رفع مستند جديد</h2>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+              رفع مستند جديد
+            </h2>
             <form onSubmit={handleUpload} className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">

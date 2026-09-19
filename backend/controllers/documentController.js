@@ -1,4 +1,6 @@
 const Document = require('../models/Document');
+const Flashcard = require('../models/Flashcard');
+const Quiz = require('../models/Quiz');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
@@ -85,10 +87,31 @@ const uploadDocument = async (req, res) => {
 // @desc    جلب كل المستندات
 const getDocuments = async (req, res) => {
   try {
-    const documents = await Document.find({ user: req.user._id }).sort({
-      createdAt: -1,
-    });
-    res.json(documents);
+    const documents = await Document.find({ user: req.user._id })
+      .sort({ createdAt: -1 });
+
+    // ✅ لكل مستند، نضيف عدد البطاقات والاختبارات
+    const documentsWithStats = await Promise.all(
+      documents.map(async (doc) => {
+        const flashcardsCount = await Flashcard.countDocuments({
+          user: req.user._id,
+          document: doc._id,
+        });
+
+        const quizzesCount = await Quiz.countDocuments({
+          user: req.user._id,
+          document: doc._id,
+        });
+
+        return {
+          ...doc.toObject(),
+          flashcardsCount,
+          quizzesCount,
+        };
+      })
+    );
+
+    res.json(documentsWithStats);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: error.message });
