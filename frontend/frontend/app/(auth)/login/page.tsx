@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useAuth } from '@/hooks/useAuth';
@@ -10,15 +10,8 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login, user, loading: authLoading } = useAuth();
+  const { login } = useAuth();
   const router = useRouter();
-
-  // ✅ لو مسجل دخول، نروح للداشبورد
-  useEffect(() => {
-    if (!authLoading && user) {
-      router.replace('/dashboard');
-    }
-  }, [user, authLoading, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,6 +20,7 @@ export default function LoginPage() {
     try {
       await login(email, password);
       toast.success('تم تسجيل الدخول بنجاح');
+      router.push('/dashboard');
     } catch (error: any) {
       toast.error(error.response?.data?.message || 'خطأ في تسجيل الدخول');
     } finally {
@@ -34,23 +28,13 @@ export default function LoginPage() {
     }
   };
 
-  if (authLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 px-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
         <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">
           مرحباً بعودتك
         </h1>
-        <p className="text-center text-gray-500 mb-6">
-          سجل دخولك للمتابعة
-        </p>
+        <p className="text-center text-gray-500 mb-6">سجل دخولك للمتابعة</p>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
