@@ -1,0 +1,2 @@
+import type { QuizQuestion } from "@/types/quiz";
+export const quizService = { list: async (): Promise<QuizQuestion[]> => [{ id: "1", question: "أي من التالي يعد تطبيقًا للتعلم الآلي؟", options: ["آلة حاسبة", "نظام توصية الأفلام", "مصباح يدوي", "ساعة توقيت"], answer: 1 }] };

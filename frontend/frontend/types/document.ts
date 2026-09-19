@@ -1,0 +1,1 @@
+export type Document = { id: string; title: string; type: "PDF" | "DOCX" | "PPTX"; size: string; updatedAt: string; progress: number; color: string };

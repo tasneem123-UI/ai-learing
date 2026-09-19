@@ -1,0 +1,4 @@
+import { BookOpen, Sparkles } from "lucide-react";
+import { FlashcardViewer } from "@/components/ai/FlashcardViewer";
+import { flashcardService } from "@/lib/flashcardService";
+export default async function FlashcardsPage() { const cards = await flashcardService.list(); return <div><div className="page-title-row"><div><p className="eyebrow"><Sparkles size={15} /> تعلم نشط</p><h1>البطاقات التعليمية</h1><p className="subheading">اختبر ذاكرتك، بطاقة تلو الأخرى.</p></div><div className="study-stat"><BookOpen size={18} /><span>٢٤ بطاقة للمراجعة</span></div></div><FlashcardViewer cards={cards} /></div>; }

@@ -1,0 +1,3 @@
+"use client";
+import { Send, Sparkles } from "lucide-react";
+export function ChatInterface() { return <div className="chat-box"><div className="chat-head"><Sparkles size={18} /><b>اسأل رفيق</b><span>متصل الآن</span></div><div className="chat-message"><span className="ai-avatar"><Sparkles size={14} /></span><p>مرحبًا سارة، كيف أساعدك في رحلتك التعليمية اليوم؟</p></div><div className="chat-input"><input placeholder="اكتب سؤالك هنا..." /><button aria-label="إرسال"><Send size={17} /></button></div></div>; }

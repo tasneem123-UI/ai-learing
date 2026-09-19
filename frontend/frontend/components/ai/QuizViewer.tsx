@@ -1,0 +1,4 @@
+"use client";
+import { useState } from "react";
+import type { QuizQuestion } from "@/types/quiz";
+export function QuizViewer({ questions }: { questions: QuizQuestion[] }) { const [selected, setSelected] = useState<number | null>(null); const question = questions[0]; return <div className="quiz-box"><div className="quiz-top"><span>السؤال ١ من {questions.length}</span><b>10 نقاط</b></div><h2>{question.question}</h2><div className="options">{question.options.map((option, index) => <button className={selected === index ? "option selected" : "option"} onClick={() => setSelected(index)} key={option}><span>{String.fromCharCode(65 + index)}</span>{option}</button>)}</div><button className="primary-button quiz-submit" disabled={selected === null}>تحقق من الإجابة</button></div>; }

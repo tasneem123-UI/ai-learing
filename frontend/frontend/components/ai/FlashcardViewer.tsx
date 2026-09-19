@@ -1,0 +1,5 @@
+"use client";
+import { useState } from "react";
+import { Check, RotateCcw, X } from "lucide-react";
+import type { Flashcard } from "@/types/flashcard";
+export function FlashcardViewer({ cards }: { cards: Flashcard[] }) { const [index, setIndex] = useState(0); const [flipped, setFlipped] = useState(false); const card = cards[index]; const next = () => { setIndex((index + 1) % cards.length); setFlipped(false); }; return <div className="flash-wrap"><div className="flash-count">{index + 1} / {cards.length}</div><button className={`flash-card ${flipped ? "flipped" : ""}`} onClick={() => setFlipped(!flipped)}><span className="flash-tag">{card.category}</span><strong>{flipped ? card.answer : card.question}</strong><small>{flipped ? "الإجابة" : "اضغط لقلب البطاقة"}</small></button><div className="flash-actions"><button className="round-action bad" onClick={next}><X size={19} /></button><button className="round-action neutral" onClick={() => setFlipped(!flipped)}><RotateCcw size={18} /></button><button className="round-action good" onClick={next}><Check size={19} /></button></div></div>; }

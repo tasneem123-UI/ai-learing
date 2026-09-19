@@ -1,0 +1,3 @@
+"use client";
+import { Upload, X } from "lucide-react";
+export function UploadModal({ onClose }: { onClose: () => void }) { return <div className="modal-backdrop"><div className="modal"><button className="modal-close" onClick={onClose} aria-label="إغلاق"><X size={19} /></button><h2>إضافة مستند جديد</h2><p>ارفع ملفك ودع رفيق يحوله إلى تجربة تعلم.</p><div className="drop-zone"><Upload size={27} /><b>اسحب الملف هنا</b><span>أو اضغط للاختيار · PDF, DOCX, PPTX</span></div><button className="primary-button">رفع المستند</button></div></div>; }

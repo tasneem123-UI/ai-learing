@@ -1,0 +1,6 @@
+"use client";
+import Link from "next/link";
+import { BookOpen, FileText, LayoutDashboard, LogOut, Sparkles, Trophy, UserRound } from "lucide-react";
+import { usePathname } from "next/navigation";
+const links = [{ href: "/dashboard", label: "نظرة عامة", icon: LayoutDashboard }, { href: "/documents", label: "مستنداتي", icon: FileText }, { href: "/flashcards", label: "البطاقات التعليمية", icon: BookOpen }, { href: "/quizzes", label: "الاختبارات", icon: Trophy }];
+export function Sidebar() { const path = usePathname(); return <aside className="sidebar"><div className="side-brand"><span className="brand-orbit"><Sparkles size={18} /></span><span>مساحة التعلم</span></div><nav><p className="nav-label">القائمة الرئيسية</p>{links.map(({ href, label, icon: Icon }) => <Link className={path === href ? "nav-link active" : "nav-link"} href={href} key={href}><Icon size={18} />{label}</Link>)}<p className="nav-label second">حسابي</p><Link className={path === "/profile" ? "nav-link active" : "nav-link"} href="/profile"><UserRound size={18} />الملف الشخصي</Link></nav><div className="side-tip"><Sparkles size={16} /><b>تعلم بذكاء</b><p>حوّل ملاحظاتك إلى معرفة تدوم.</p><Link href="/documents">ابدأ الآن <span>←</span></Link></div><button className="logout"><LogOut size={17} />تسجيل الخروج</button></aside>; }

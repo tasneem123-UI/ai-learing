@@ -1,0 +1,4 @@
+"use client";
+import { Bell, Search, Sparkles } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
+export function Navbar() { const { user } = useAuth(); return <header className="topbar"><div className="brand-mark"><span><Sparkles size={17} /></span><b>رفيق</b></div><div className="search-box"><Search size={18} /><input placeholder="ابحث في مستنداتك..." aria-label="البحث" /></div><div className="top-actions"><button className="icon-button" aria-label="الإشعارات"><Bell size={19} /><i /></button><div className="user-chip"><div className="avatar">{user?.name.slice(0, 1)}</div><div><b>{user?.name}</b><small>طالب نشط</small></div></div></div></header>; }

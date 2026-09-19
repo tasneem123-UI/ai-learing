@@ -1,0 +1,1 @@
+export function Loading() { return <div className="loading">جار التحميل...</div>; }

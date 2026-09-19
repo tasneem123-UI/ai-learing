@@ -1,0 +1,4 @@
+import Link from "next/link";
+import { ArrowUpLeft, FileText, MoreHorizontal } from "lucide-react";
+import type { Document } from "@/types/document";
+export function DocumentCard({ document }: { document: Document }) { return <article className="document-card"><div className="doc-icon" style={{ background: document.color }}><FileText size={21} /></div><button className="more" aria-label="المزيد"><MoreHorizontal size={19} /></button><Link href={`/documents/${document.id}`}><h3>{document.title}</h3></Link><p>{document.type} · {document.size} · {document.updatedAt}</p><div className="progress-meta"><span>تقدم التعلم</span><b>{document.progress}%</b></div><div className="progress"><span style={{ width: `${document.progress}%` }} /></div><Link className="doc-open" href={`/documents/${document.id}`}>فتح المستند <ArrowUpLeft size={15} /></Link></article>; }

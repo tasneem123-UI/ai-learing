@@ -1,0 +1,1 @@
+export function SummaryView({ text }: { text: string }) { return <div className="summary-view"><h3>الملخص الذكي</h3><p>{text}</p></div>; }

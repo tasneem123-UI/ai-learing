@@ -1,0 +1,4 @@
+"use client";
+import Link from "next/link";
+import { ArrowLeft, LockKeyhole, Mail } from "lucide-react";
+export function LoginForm() { return <form className="auth-form"><label>البريد الإلكتروني<div className="field"><Mail size={18} /><input type="email" placeholder="you@example.com" /></div></label><label>كلمة المرور<div className="field"><LockKeyhole size={18} /><input type="password" placeholder="••••••••" /></div></label><div className="form-row"><label className="check"><input type="checkbox" /> تذكرني</label><Link href="#">نسيت كلمة المرور؟</Link></div><button className="primary-button" type="submit">تسجيل الدخول <ArrowLeft size={17} /></button><p className="auth-switch">ليس لديك حساب؟ <Link href="/register">أنشئ حسابًا جديدًا</Link></p></form>; }

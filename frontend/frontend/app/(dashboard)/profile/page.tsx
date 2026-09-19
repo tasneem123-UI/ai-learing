@@ -1,0 +1,2 @@
+import { Mail, Settings, UserRound } from "lucide-react";
+export default function ProfilePage() { return <div><div className="page-title-row"><div><p className="eyebrow">حسابك</p><h1>الملف الشخصي</h1><p className="subheading">أدر بياناتك وتفضيلاتك.</p></div></div><div className="profile-panel"><div className="profile-avatar"><UserRound size={36} /></div><h2>سارة أحمد</h2><p><Mail size={15} /> sarah@example.com</p><button className="outline-button"><Settings size={16} /> إعدادات الحساب</button></div></div>; }

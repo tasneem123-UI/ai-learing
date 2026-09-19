@@ -19,9 +19,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // ✅ CORS Configuration
+const allowedOrigins = [
+  'http://localhost:3001',
+  'http://localhost:3000',
+  'https://ai-learing.pxxlspace.cv',
+  // ضيفي أي دومين هتستخدميه
+];
+
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5000'],
-    credentials: true
+  origin: function (origin, callback) {
+    // ✅ اسمح للطلبات من غير Origin (زي Postman)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.log('❌ CORS blocked for:', origin);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true, // ✅ مهم جداً للـ Cookies
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

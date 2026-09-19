@@ -1,0 +1,4 @@
+"use client";
+import Link from "next/link";
+import { ArrowLeft, LockKeyhole, Mail, UserRound } from "lucide-react";
+export function RegisterForm() { return <form className="auth-form"><label>الاسم الكامل<div className="field"><UserRound size={18} /><input placeholder="سارة أحمد" /></div></label><label>البريد الإلكتروني<div className="field"><Mail size={18} /><input type="email" placeholder="you@example.com" /></div></label><label>كلمة المرور<div className="field"><LockKeyhole size={18} /><input type="password" placeholder="••••••••" /></div></label><button className="primary-button" type="submit">إنشاء الحساب <ArrowLeft size={17} /></button><p className="auth-switch">لديك حساب بالفعل؟ <Link href="/login">سجل دخولك</Link></p></form>; }

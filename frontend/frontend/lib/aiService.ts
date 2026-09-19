@@ -1,0 +1,1 @@
+export const aiService = { summarize: async (text: string) => `ملخص ذكي للمحتوى: ${text.slice(0, 120)}...` };
