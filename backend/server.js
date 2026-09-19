@@ -42,8 +42,8 @@ app.use(cors({
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
-
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+const os = require('os');
+app.use('/uploads', express.static(path.join(os.tmpdir(), 'uploads')));
 
 // ========== Routes ==========
 
