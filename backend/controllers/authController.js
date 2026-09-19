@@ -2,7 +2,30 @@ const User = require('../models/User');
 const jwt = require('jsonwebtoken');
 const validator = require('validator');
 
+// ==========================================
+// ✅ إعدادات الكوكي الموحدة
+// ==========================================
+const isProduction = process.env.NODE_ENV === 'production';
+
+const cookieOptions = {
+    httpOnly: true,
+    secure: isProduction,          // true في production (HTTPS)
+    sameSite: isProduction ? 'none' : 'lax',  // none في production، lax محلياً
+};
+
+const accessTokenCookieOptions = {
+    ...cookieOptions,
+    maxAge: 15 * 60 * 1000,        // 15 دقيقة
+};
+
+const refreshTokenCookieOptions = {
+    ...cookieOptions,
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 أيام
+};
+
+// ==========================================
 // ✅ توليد Access Token
+// ==========================================
 const generateAccessToken = (user) => {
     return jwt.sign(
         { userId: user._id, role: user.role },
@@ -11,7 +34,9 @@ const generateAccessToken = (user) => {
     );
 };
 
+// ==========================================
 // ✅ توليد Refresh Token
+// ==========================================
 const generateRefreshToken = (user) => {
     return jwt.sign(
         { userId: user._id },
@@ -20,12 +45,23 @@ const generateRefreshToken = (user) => {
     );
 };
 
+// ==========================================
+// ✅ إزالة كلمة المرور من بيانات المستخدم
+// ==========================================
+const sanitizeUser = (user) => {
+    const userObj = user.toObject ? user.toObject() : { ...user };
+    delete userObj.password;
+    return userObj;
+};
+
+// ==========================================
 // ✅ 1. Register - تسجيل مستخدم جديد
+// ==========================================
 const register = async (req, res, next) => {
     try {
         const { name, email, password, role } = req.body;
 
-        // 🔹 التحقق من الحقول المطلوبة (Missing Required Fields)
+        // 🔹 التحقق من الحقول المطلوبة
         if (!name || !email || !password) {
             return res.status(400).json({
                 success: false,
@@ -34,7 +70,7 @@ const register = async (req, res, next) => {
             });
         }
 
-        // 🔹 التحقق من صحة الإيميل (Invalid Email)
+        // 🔹 التحقق من صحة الإيميل
         if (!validator.isEmail(email)) {
             return res.status(400).json({
                 success: false,
@@ -43,7 +79,7 @@ const register = async (req, res, next) => {
             });
         }
 
-        // 🔹 التحقق من قوة كلمة المرور (Weak Password)
+        // 🔹 التحقق من قوة كلمة المرور
         if (password.length < 6) {
             return res.status(400).json({
                 success: false,
@@ -52,7 +88,7 @@ const register = async (req, res, next) => {
             });
         }
 
-        // 🔹 التحقق من عدم وجود الإيميل (Duplicate Email)
+        // 🔹 التحقق من عدم وجود الإيميل
         const userExists = await User.findOne({ email });
         if (userExists) {
             return res.status(400).json({
@@ -73,10 +109,9 @@ const register = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: 'تم التسجيل بنجاح',
-            data: user
+            data: sanitizeUser(user)
         });
     } catch (error) {
-        // 🔹 معالجة أي خطأ غير متوقع
         res.status(500).json({
             success: false,
             message: 'حدث خطأ في السيرفر',
@@ -85,12 +120,14 @@ const register = async (req, res, next) => {
     }
 };
 
+// ==========================================
 // ✅ 2. Login - تسجيل الدخول
+// ==========================================
 const login = async (req, res, next) => {
     try {
         const { email, password } = req.body;
 
-        // 🔹 التحقق من الحقول المطلوبة (Missing Required Fields)
+        // 🔹 التحقق من الحقول المطلوبة
         if (!email || !password) {
             return res.status(400).json({
                 success: false,
@@ -101,8 +138,7 @@ const login = async (req, res, next) => {
 
         // 🔹 البحث عن المستخدم مع كلمة المرور
         const user = await User.findOne({ email }).select('+password');
-        
-        // 🔹 التحقق من وجود المستخدم (Invalid Login Credentials)
+
         if (!user) {
             return res.status(401).json({
                 success: false,
@@ -111,7 +147,7 @@ const login = async (req, res, next) => {
             });
         }
 
-        // 🔹 التحقق من كلمة المرور (Invalid Login Credentials)
+        // 🔹 التحقق من كلمة المرور
         const isPasswordMatch = await user.matchPassword(password);
         if (!isPasswordMatch) {
             return res.status(401).json({
@@ -125,26 +161,14 @@ const login = async (req, res, next) => {
         const accessToken = generateAccessToken(user);
         const refreshToken = generateRefreshToken(user);
 
-        // ✅ حفظ التوكنات في Cookies (HTTP-Only)
-        res.cookie('accessToken', accessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 15 * 60 * 1000 // 15 دقيقة
-        });
-
-        res.cookie('refreshToken', refreshToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 أيام
-        });
+        // ✅ حفظ التوكنات في Cookies
+        res.cookie('accessToken', accessToken, accessTokenCookieOptions);
+        res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
 
         res.json({
             success: true,
             message: 'تم تسجيل الدخول بنجاح',
-            data: user,
-          
+            data: sanitizeUser(user)   // ✅ بدون كلمة المرور
         });
     } catch (error) {
         res.status(500).json({
@@ -155,12 +179,14 @@ const login = async (req, res, next) => {
     }
 };
 
+// ==========================================
 // ✅ 3. Refresh Token - تجديد التوكن
+// ==========================================
 const refreshToken = async (req, res, next) => {
     try {
         const refreshToken = req.cookies.refreshToken;
 
-        // 🔹 التحقق من وجود Refresh Token (Unauthorized)
+        // 🔹 التحقق من وجود Refresh Token
         if (!refreshToken) {
             return res.status(401).json({
                 success: false,
@@ -174,7 +200,6 @@ const refreshToken = async (req, res, next) => {
         try {
             decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
         } catch (error) {
-            // 🔹 Invalid Refresh Token
             if (error.name === 'JsonWebTokenError') {
                 return res.status(401).json({
                     success: false,
@@ -182,7 +207,6 @@ const refreshToken = async (req, res, next) => {
                     error: 'Invalid Refresh Token'
                 });
             }
-            // 🔹 Expired Refresh Token
             if (error.name === 'TokenExpiredError') {
                 return res.status(401).json({
                     success: false,
@@ -192,8 +216,8 @@ const refreshToken = async (req, res, next) => {
             }
             throw error;
         }
-        
-        // 🔹 التحقق من وجود المستخدم (User Not Found)
+
+        // 🔹 التحقق من وجود المستخدم
         const user = await User.findById(decoded.userId);
         if (!user) {
             return res.status(404).json({
@@ -207,17 +231,11 @@ const refreshToken = async (req, res, next) => {
         const newAccessToken = generateAccessToken(user);
 
         // تحديث Cookie
-        res.cookie('accessToken', newAccessToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            sameSite: 'strict',
-            maxAge: 15 * 60 * 1000
-        });
+        res.cookie('accessToken', newAccessToken, accessTokenCookieOptions);
 
         res.json({
             success: true,
             message: 'تم تجديد التوكن بنجاح',
-            accessToken: newAccessToken
         });
     } catch (error) {
         res.status(500).json({
@@ -228,11 +246,12 @@ const refreshToken = async (req, res, next) => {
     }
 };
 
+// ==========================================
 // ✅ 4. Logout - تسجيل الخروج
+// ==========================================
 const logout = async (req, res) => {
-    // مسح الكوكيز
-    res.clearCookie('accessToken');
-    res.clearCookie('refreshToken');
+    res.clearCookie('accessToken', cookieOptions);
+    res.clearCookie('refreshToken', cookieOptions);
 
     res.json({
         success: true,
@@ -240,10 +259,11 @@ const logout = async (req, res) => {
     });
 };
 
+// ==========================================
 // ✅ 5. Get Current User - جلب بيانات المستخدم الحالي
+// ==========================================
 const getCurrentUser = async (req, res, next) => {
     try {
-        // 🔹 التحقق من وجود المستخدم (من الـ Middleware)
         if (!req.userId) {
             return res.status(401).json({
                 success: false,
@@ -253,8 +273,7 @@ const getCurrentUser = async (req, res, next) => {
         }
 
         const user = await User.findById(req.userId);
-        
-        // 🔹 التحقق من وجود المستخدم (User Not Found)
+
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -265,7 +284,7 @@ const getCurrentUser = async (req, res, next) => {
 
         res.json({
             success: true,
-            data: user
+            data: sanitizeUser(user)   // ✅ بدون كلمة المرور
         });
     } catch (error) {
         res.status(500).json({
