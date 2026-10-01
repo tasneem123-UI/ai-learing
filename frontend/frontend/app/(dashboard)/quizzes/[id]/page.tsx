@@ -108,13 +108,13 @@ export default function QuizTakePage() {
         ← رجوع للاختبارات
       </button>
 
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">{quiz.title}</h1>
+      <h1 className="mb-2 wrap-break-word text-2xl font-bold text-gray-800 sm:text-3xl">{quiz.title}</h1>
       <p className="text-gray-500 mb-6">{quiz.questions.length} أسئلة</p>
 
       {/* Result Card */}
       {submitted && (
         <div
-          className={`rounded-2xl p-8 mb-6 text-center text-white ${
+          className={`mb-6 rounded-2xl p-5 text-center text-white sm:p-8 ${
             score.percentage >= 50
               ? 'bg-gradient-to-br from-green-500 to-blue-600'
               : 'bg-gradient-to-br from-red-500 to-orange-600'
@@ -138,7 +138,7 @@ export default function QuizTakePage() {
           const isCorrect = userAnswer === q.correctAnswer;
 
           return (
-            <div key={idx} className="bg-white rounded-2xl shadow-lg p-6">
+            <div key={idx} className="rounded-2xl bg-white p-4 shadow-lg sm:p-6">
               <p className="font-bold text-gray-800 mb-4">
                 {idx + 1}. {q.question}
               </p>
@@ -161,7 +161,7 @@ export default function QuizTakePage() {
                       key={oIdx}
                       onClick={() => handleSelect(idx, opt)}
                       disabled={submitted}
-                      className={`w-full text-right px-4 py-2 rounded-lg border transition ${btnClass}`}
+                      className={`w-full wrap-break-word text-right px-3 py-2 rounded-lg border transition sm:px-4 ${btnClass}`}
                     >
                       {opt}
                     </button>
@@ -192,7 +192,7 @@ export default function QuizTakePage() {
           {saving ? 'جاري الحفظ...' : 'تقديم الاختبار'}
         </button>
       ) : (
-        <div className="mt-6 flex gap-3">
+        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
           <button
             onClick={() => {
               setSelectedAnswers({});

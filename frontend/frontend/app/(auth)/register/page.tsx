@@ -56,8 +56,8 @@ export default function RegisterPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-purple-50 px-4 py-8">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
-        <h1 className="text-3xl font-bold text-center mb-2 text-gray-800">
+      <div className="w-full max-w-md rounded-2xl bg-white p-5 shadow-xl sm:p-8">
+        <h1 className="mb-2 text-center text-2xl font-bold text-gray-800 sm:text-3xl">
           إنشاء حساب جديد
         </h1>
         <p className="text-center text-gray-500 mb-6">

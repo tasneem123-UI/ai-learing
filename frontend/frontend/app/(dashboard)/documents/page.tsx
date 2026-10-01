@@ -104,18 +104,18 @@ export default function DocumentsPage() {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">المستندات</h1>
+      <div className="mb-5 flex flex-col items-stretch justify-between gap-3 sm:mb-6 sm:flex-row sm:items-center">
+        <h1 className="text-2xl font-bold text-gray-800 sm:text-3xl">المستندات</h1>
         <button
           onClick={() => setShowModal(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
+          className="w-full rounded-lg bg-blue-600 px-4 py-2.5 text-white transition hover:bg-blue-700 sm:w-auto"
         >
           + رفع مستند
         </button>
       </div>
 
       {documents.length === 0 ? (
-        <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+        <div className="bg-white rounded-2xl shadow-lg p-6 text-center sm:p-12">
           <p className="text-6xl mb-4">📄</p>
           <h2 className="text-xl font-bold text-gray-700 mb-2">
             لا توجد مستندات بعد
@@ -129,11 +129,11 @@ export default function DocumentsPage() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
           {documents.map((doc) => (
             <div
               key={doc._id}
-              className="bg-white rounded-2xl shadow-lg p-6 flex flex-col hover:shadow-xl transition"
+              className="flex min-w-0 flex-col rounded-2xl bg-white p-5 shadow-lg transition hover:shadow-xl sm:p-6"
             >
               {/* Icon + Delete */}
               <div className="flex items-start justify-between mb-4">
@@ -192,9 +192,9 @@ export default function DocumentsPage() {
 
       {/* Upload Modal */}
       {showModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto bg-black/50 p-3 sm:items-center sm:p-4">
+          <div className="my-auto max-h-[calc(100dvh-1.5rem)] w-full max-w-md overflow-y-auto rounded-2xl bg-white p-5 shadow-xl sm:max-h-[calc(100dvh-2rem)] sm:p-6">
+            <h2 className="mb-5 text-xl font-bold text-gray-800 sm:mb-6 sm:text-2xl">
               رفع مستند جديد
             </h2>
             <form onSubmit={handleUpload} className="space-y-4">
@@ -225,7 +225,7 @@ export default function DocumentsPage() {
                 />
               </div>
 
-              <div className="flex gap-3 pt-2">
+              <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row">
                 <button
                   type="submit"
                   disabled={uploading}

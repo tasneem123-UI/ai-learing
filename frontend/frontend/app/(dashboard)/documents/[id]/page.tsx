@@ -224,7 +224,7 @@ export default function DocumentDetailsPage() {
   return (
     <div className="min-h-screen bg-gray-100">
       {/* Header */}
-      <div className="bg-white shadow-sm px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+      <div className="flex flex-col gap-3 bg-white px-3 py-3 shadow-sm sm:flex-row sm:items-center sm:justify-between sm:px-4">
         <div className="flex items-center gap-3 min-w-0">
           <button
             onClick={() => router.push('/documents')}
@@ -237,7 +237,7 @@ export default function DocumentDetailsPage() {
           </h1>
         </div>
 
-        <div className="flex items-center gap-1 flex-wrap">
+        <div className="-mx-3 flex max-w-full gap-1 overflow-x-auto px-3 pb-1 sm:mx-0 sm:flex-wrap sm:overflow-visible sm:px-0 sm:pb-0">
           {[
             { key: 'pdf', label: '📄 المستند' },
             { key: 'flashcards', label: '🃏 البطاقات' },
@@ -248,7 +248,7 @@ export default function DocumentDetailsPage() {
             <button
               key={tab.key}
               onClick={() => setActiveTab(tab.key as any)}
-              className={`px-3 py-1.5 text-sm rounded-lg transition ${
+              className={`shrink-0 whitespace-nowrap px-3 py-1.5 text-xs rounded-lg transition sm:text-sm ${
                 activeTab === tab.key
                   ? 'bg-blue-600 text-white font-bold'
                   : 'text-gray-600 hover:bg-gray-100'
@@ -261,22 +261,22 @@ export default function DocumentDetailsPage() {
       </div>
 
       {/* Content Area */}
-      <div className="p-4">
+      <div className="p-2 sm:p-4">
         {/* ============ Document Viewer Tab ============ */}
         {activeTab === 'pdf' && (
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
             {/* Toolbar */}
-            <div className="bg-gray-800 text-white px-4 py-2 flex items-center justify-between flex-wrap gap-2">
+            <div className="flex flex-col gap-2 bg-gray-800 px-3 py-2 text-white sm:flex-row sm:items-center sm:justify-between sm:px-4">
               <div className="flex items-center gap-2 text-sm">
                 <span className="bg-gray-700 px-2 py-1 rounded truncate max-w-xs">
                   📄 {document.fileName}
                 </span>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap gap-2">
                 <a
                   href={fileUrl}
                   download={document.fileName}
-                  className="text-sm bg-green-600 hover:bg-green-700 px-3 py-1 rounded transition flex items-center gap-1"
+                  className="flex items-center gap-1 rounded bg-green-600 px-2.5 py-1.5 text-xs transition hover:bg-green-700 sm:px-3 sm:text-sm"
                 >
                   ⬇️ تحميل
                 </a>
@@ -284,7 +284,7 @@ export default function DocumentDetailsPage() {
                   href={fileUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded transition flex items-center gap-1"
+                  className="flex items-center gap-1 rounded bg-blue-600 px-2.5 py-1.5 text-xs transition hover:bg-blue-700 sm:px-3 sm:text-sm"
                 >
                   🔗 فتح في تاب جديد
                 </a>
@@ -292,7 +292,7 @@ export default function DocumentDetailsPage() {
             </div>
 
             {/* Viewer */}
-            <div className="bg-gray-700 h-[80vh] overflow-hidden">
+            <div className="h-[65dvh] min-h-[360px] overflow-hidden bg-gray-700 sm:h-[80vh]">
               {/* ✅ PDF */}
               {isPDF && (
                 <iframe
@@ -304,7 +304,7 @@ export default function DocumentDetailsPage() {
 
               {/* ✅ Word - نعرض المحتوى النصي */}
               {isWord && (
-                <div className="bg-white h-full overflow-y-auto p-8">
+                <div className="h-full overflow-y-auto bg-white p-4 sm:p-8">
                   {document.content && document.content.trim() ? (
                     <>
                       <div className="mb-6 p-3 bg-yellow-50 border-l-4 border-yellow-500 rounded">
@@ -344,7 +344,7 @@ export default function DocumentDetailsPage() {
 
               {/* ✅ TXT */}
               {isTxt && (
-                <div className="bg-white h-full overflow-y-auto p-8">
+                <div className="h-full overflow-y-auto bg-white p-4 sm:p-8">
                   <div
                     className="whitespace-pre-wrap text-gray-800 leading-relaxed"
                     dir="auto"
@@ -378,7 +378,7 @@ export default function DocumentDetailsPage() {
 
         {/* ============ Flashcards Tab ============ */}
         {activeTab === 'flashcards' && (
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="rounded-2xl bg-white p-4 shadow-lg sm:p-6">
             {flashcards.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-6xl mb-4">🃏</p>
@@ -401,13 +401,13 @@ export default function DocumentDetailsPage() {
                 <div className="max-w-2xl mx-auto">
                   <div
                     onClick={() => setShowAnswer(!showAnswer)}
-                    className="bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-2xl p-12 min-h-[300px] flex items-center justify-center cursor-pointer shadow-xl transition hover:scale-[1.02]"
+                    className="flex min-h-[240px] cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 p-5 text-white shadow-xl transition hover:scale-[1.02] sm:min-h-[300px] sm:p-12"
                   >
                     <div className="text-center">
                       <p className="text-sm opacity-75 mb-4">
                         {showAnswer ? 'الإجابة' : 'السؤال'}
                       </p>
-                      <p className="text-2xl font-bold">
+                      <p className="wrap-break-word text-xl font-bold sm:text-2xl">
                         {showAnswer
                           ? flashcards[currentCardIndex]?.answer
                           : flashcards[currentCardIndex]?.question}
@@ -418,7 +418,7 @@ export default function DocumentDetailsPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center justify-between mt-6">
+                  <div className="mt-6 grid grid-cols-[1fr_auto_1fr] items-center gap-2 sm:flex sm:justify-between">
                     <button
                       onClick={() => {
                         setCurrentCardIndex(
@@ -427,13 +427,13 @@ export default function DocumentDetailsPage() {
                         );
                         setShowAnswer(false);
                       }}
-                      className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                      className="whitespace-nowrap rounded-lg bg-gray-200 px-2 py-2 text-xs text-gray-700 transition hover:bg-gray-300 sm:px-4 sm:text-sm"
                     >
                       ← السابق
                     </button>
 
-                    <div className="flex items-center gap-4">
-                      <span className="text-gray-600 text-sm">
+                    <div className="flex items-center justify-center gap-2 sm:gap-4">
+                      <span className="whitespace-nowrap text-xs text-gray-600 sm:text-sm">
                         {currentCardIndex + 1} / {flashcards.length}
                       </span>
                       <button
@@ -456,7 +456,7 @@ export default function DocumentDetailsPage() {
                         );
                         setShowAnswer(false);
                       }}
-                      className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                      className="whitespace-nowrap rounded-lg bg-gray-200 px-2 py-2 text-xs text-gray-700 transition hover:bg-gray-300 sm:px-4 sm:text-sm"
                     >
                       التالي →
                     </button>
@@ -500,7 +500,7 @@ export default function DocumentDetailsPage() {
 
         {/* ============ Quiz Tab ============ */}
         {activeTab === 'quiz' && (
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="rounded-2xl bg-white p-4 shadow-lg sm:p-6">
             {selectedQuiz ? (
               <div className="max-w-3xl mx-auto">
                 <button
@@ -514,7 +514,7 @@ export default function DocumentDetailsPage() {
                   ← رجوع للاختبارات
                 </button>
 
-                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                <h2 className="mb-6 break-words text-xl font-bold text-gray-800 sm:text-2xl">
                   {selectedQuiz.title}
                 </h2>
 
@@ -546,7 +546,7 @@ export default function DocumentDetailsPage() {
                     {selectedQuiz.questions.map((q, idx) => (
                       <div
                         key={idx}
-                        className="bg-gray-50 rounded-lg p-6 border border-gray-200"
+                        className="rounded-lg border border-gray-200 bg-gray-50 p-4 sm:p-6"
                       >
                         <p className="font-bold text-gray-800 mb-4">
                           {idx + 1}. {q.question}
@@ -668,7 +668,7 @@ export default function DocumentDetailsPage() {
 
         {/* ============ Summary Tab ============ */}
         {activeTab === 'summary' && (
-          <div className="bg-white rounded-2xl shadow-lg p-6">
+          <div className="rounded-2xl bg-white p-4 shadow-lg sm:p-6">
             {summary.length === 0 ? (
               <div className="text-center py-12">
                 <p className="text-6xl mb-4">📋</p>
@@ -713,8 +713,8 @@ export default function DocumentDetailsPage() {
 
         {/* ============ Chat Tab ============ */}
         {activeTab === 'chat' && (
-          <div className="bg-white rounded-2xl shadow-lg p-6 max-w-3xl mx-auto">
-            <div className="bg-gray-50 rounded-2xl p-4 min-h-[400px] max-h-[500px] overflow-y-auto mb-4">
+          <div className="mx-auto max-w-3xl rounded-2xl bg-white p-3 shadow-lg sm:p-6">
+            <div className="mb-4 min-h-[45vh] max-h-[60vh] overflow-y-auto rounded-2xl bg-gray-50 p-3 sm:min-h-[400px] sm:max-h-[500px] sm:p-4">
               {chatMessages.length === 0 ? (
                 <div className="text-center py-12">
                   <p className="text-6xl mb-4">💬</p>
@@ -733,7 +733,7 @@ export default function DocumentDetailsPage() {
                       }`}
                     >
                       <div
-                        className={`max-w-[80%] px-4 py-2 rounded-2xl ${
+                        className={`max-w-[90%] wrap-break-word px-3 py-2 rounded-2xl sm:max-w-[80%] sm:px-4 ${
                           msg.role === 'user'
                             ? 'bg-blue-600 text-white'
                             : 'bg-white border border-gray-200 text-gray-800'
@@ -754,7 +754,7 @@ export default function DocumentDetailsPage() {
               )}
             </div>
 
-            <form onSubmit={handleSendMessage} className="flex gap-2">
+            <form onSubmit={handleSendMessage} className="flex min-w-0 gap-2">
               <input
                 type="text"
                 value={message}
@@ -766,7 +766,7 @@ export default function DocumentDetailsPage() {
               <button
                 type="submit"
                 disabled={sendingMessage || !message.trim()}
-                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition disabled:opacity-50"
+                className="shrink-0 rounded-lg bg-blue-600 px-3 py-2 text-white transition hover:bg-blue-700 disabled:opacity-50 sm:px-6"
               >
                 إرسال
               </button>

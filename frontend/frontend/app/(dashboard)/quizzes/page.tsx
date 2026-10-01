@@ -61,10 +61,10 @@ export default function QuizzesPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-6">الاختبارات</h1>
+      <h1 className="mb-5 text-2xl font-bold text-gray-800 sm:mb-6 sm:text-3xl">الاختبارات</h1>
 
       {quizzes.length === 0 ? (
-        <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
+        <div className="bg-white rounded-2xl shadow-lg p-6 text-center sm:p-12">
           <p className="text-6xl mb-4">📝</p>
           <h2 className="text-xl font-bold text-gray-700 mb-2">لا توجد اختبارات بعد</h2>
           <p className="text-gray-500 mb-6">افتح مستند وولّد اختبار منه</p>
@@ -76,11 +76,11 @@ export default function QuizzesPage() {
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 xl:grid-cols-3">
           {quizzes.map((quiz) => {
             const diff = difficultyLabel(quiz.difficulty);
             return (
-              <div key={quiz._id} className="bg-white rounded-2xl shadow-lg p-6">
+              <div key={quiz._id} className="min-w-0 rounded-2xl bg-white p-5 shadow-lg sm:p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div className="bg-purple-100 w-12 h-12 rounded-lg flex items-center justify-center text-2xl">
                     📝
@@ -98,12 +98,12 @@ export default function QuizzesPage() {
                   {quiz.questions.length} أسئلة
                 </p>
 
-                <div className="flex items-center gap-2 mb-4">
+                <div className="mb-4 flex flex-wrap items-center gap-2">
                   <span className={`text-xs px-2 py-1 rounded-full ${diff.color}`}>
                     {diff.text}
                   </span>
                   {quiz.document && (
-                    <span className="text-xs text-gray-400">
+                    <span className="min-w-0 truncate text-xs text-gray-400">
                       📄 {quiz.document.title}
                     </span>
                   )}

@@ -84,18 +84,18 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold text-gray-800 mb-2">
+      <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-2 wrap-break-word">
         مرحباً، {user?.name} 👋
       </h1>
-      <p className="text-gray-600 mb-8">مرحباً بك في لوحة التحكم</p>
+      <p className="text-gray-600 mb-6 sm:mb-8">مرحباً بك في لوحة التحكم</p>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-8">
         {cards.map((card) => (
           <Link
             key={card.title}
             href={card.href}
-            className="bg-white rounded-2xl shadow-lg p-6 hover:shadow-xl transition"
+            className="min-w-0 bg-white rounded-2xl shadow-lg p-5 sm:p-6 hover:shadow-xl transition"
           >
             <div className={`${card.color} w-12 h-12 rounded-lg flex items-center justify-center text-2xl mb-4`}>
               {card.icon}
@@ -107,7 +107,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Recent Documents */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
+      <div className="min-w-0 bg-white rounded-2xl shadow-lg p-4 sm:p-6">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-gray-800">آخر المستندات</h2>
           <Link href="/documents" className="text-blue-600 hover:underline text-sm">
@@ -121,14 +121,14 @@ export default function DashboardPage() {
               <Link
                 key={doc._id}
                 href={`/documents/${doc._id}`}
-                className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition"
+                className="flex min-w-0 items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition"
               >
                 <div className="bg-blue-100 w-10 h-10 rounded-lg flex items-center justify-center">
                   📄
                 </div>
-                <div className="flex-1">
-                  <p className="font-medium text-gray-800">{doc.title}</p>
-                  <p className="text-xs text-gray-500">{doc.fileName}</p>
+                <div className="min-w-0 flex-1">
+                  <p className="break-words font-medium text-gray-800">{doc.title}</p>
+                  <p className="truncate text-xs text-gray-500">{doc.fileName}</p>
                 </div>
               </Link>
             ))}
