@@ -23,7 +23,7 @@ const allowedOrigins = [
   'http://localhost:3001',
   'http://localhost:3000',
   'https://ai-learing.pxxlspace.cv',
-    'https://incandescent-naiad-9137a7.netlify.app', 
+    'https://ai-learing-rjbokk97x-tasneem-khalid-s-projects.vercel.app', 
   // ضيفي أي دومين هتستخدميه
 ];
 
