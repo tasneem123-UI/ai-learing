@@ -24,6 +24,7 @@ const allowedOrigins = [
   'http://localhost:3000',
   'https://ai-learing.pxxlspace.cv',
     'https://ai-learing-rjbokk97x-tasneem-khalid-s-projects.vercel.app', 
+    "https://ai-learing-kd0eq1hf7-tasneem-khalid-s-projects.vercel.app"
   // ضيفي أي دومين هتستخدميه
 ];
 
